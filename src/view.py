@@ -1,7 +1,6 @@
 from PySide2.QtWidgets import QMainWindow, QApplication, QWidget, QPushButton, QGridLayout, QVBoxLayout, QLabel
 from PySide2.QtCore import Qt
-import sys
-
+from src.dictionnary import dico
 
 class ViewMainFrame(QMainWindow):
     def __init__(self):
@@ -20,14 +19,16 @@ class ViewMainWidget(QWidget):
 
         self.pos_btn = [(4,2)] + [(4 - i//3,i % 3 + 1) for i in range(9)] + [(5-i,4) for i in range(4)] + [(1,4-i) for i in range(4)] + [(6,i+1) for i in range(3)]
         self.btn = []           # Liste des objets Boutons
-        self.dic = dico()       # Boutons Opérations et Fonctionnalités liés à leurs fonctions correspondantes
+        self.d = dico()
+        self.btn_dic = self.d.button_dic()     # Boutons Opérations et Fonctionnalités liés à leurs fonctions correspondantes
 
         # Boutons Chiffres
         for i in range(10):
             self.btn.append(VButtonNum((self.pos_btn[i][0], self.pos_btn[i][1]), (w, h), i, self.button_num_clicked))
+
         # Boutons Opérations
         for i in range(10,21):
-            self.btn.append(VButtonNum((self.pos_btn[i][0], self.pos_btn[i][1]), (w,h), self.dic.button_dic()[i][0], eval("self."+self.dic.button_dic()[i][1])))
+            self.btn.append(VButtonNum((self.pos_btn[i][0], self.pos_btn[i][1]), (w,h), self.btn_dic[i][0], eval("self."+self.btn_dic[i][1])))
 
         # Création de la zone de texte
         self.label_txt = ""
@@ -57,27 +58,27 @@ class ViewMainWidget(QWidget):
     def button_num_clicked(self, n):
         self.btn_signal.emit(str(n))
     def button_add_clicked(self):
-        print('+')
+        self.btn_signal.emit('+')
     def button_sub_clicked(self):
-        print('-')
+        self.btn_signal.emit('-')
     def button_mul_clicked(self):
-        print('x')
+        self.btn_signal.emit('*')
     def button_div_clicked(self):
-        print('%')
+        self.btn_signal.emit('/')
     def button_opp_clicked(self):
-        print('<->')
+        self.btn_signal.emit('*(-1)')
     def button_sqrt_clicked(self):
-        print('sqrt')
+        self.btn_signal.emit('sqrt')
     def button_sq_clicked(self):
-        print('x^2')
+        self.btn_signal.emit('x^2')
     def button_pow_clicked(self):
-        print('^')
+        self.btn_signal.emit('x^y')
     def button_ac_clicked(self):
-        print('AC')
+        self.btn_signal.emit('AC')
     def button_clear_clicked(self):
-        print('c')
+        self.btn_signal.emit('c')
     def button_enter_clicked(self):
-        self.label.setText("enter")
+        self.btn_signal.emit('enter')
 
 
 class VButtonNum(QPushButton):
@@ -91,28 +92,4 @@ class VButtonNum(QPushButton):
         else:
             self.clicked.connect(callback)
 
-class dico:
-    def __init__(self):
-        self.__button_dic = {
-            10 : ['+', 'button_add_clicked'],
-            11 : ['-', 'button_sub_clicked'],
-            12 : ['x', 'button_mul_clicked'],
-            13 : ['%', 'button_div_clicked'],
-            14 : ['*(-1)', 'button_opp_clicked'],
-            15 : ['sqrt', 'button_sqrt_clicked'],
-            16 : ['x^2', 'button_sq_clicked'],
-            17 : ['x^y', 'button_pow_clicked'],
-            18 : ['AC', 'button_ac_clicked'],
-            19 : ['clear', 'button_clear_clicked'],
-            20 : ['ENTER', 'button_enter_clicked'] }
 
-    def button_dic(self):
-        return self.__button_dic
-"""
-if __name__ == "__main__":
-    app = QApplication(sys.argv)
-    gui = ViewMainFrame()
-    gui.show()
-
-
-    sys.exit(app.exec_())"""
