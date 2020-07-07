@@ -14,10 +14,10 @@ class ViewMainWidget(QWidget):
 
     def __init__(self):
         QWidget.__init__(self)
-        w = 50      # largeur des boutons
-        h = 30      # hauteur des touches
+        w = 75      # largeur des boutons
+        h = 50      # hauteur des touches
 
-        self.pos_btn = [(4,2)] + [(4 - i//3,i % 3 + 1) for i in range(9)] + [(5-i,4) for i in range(4)] + [(1,4-i) for i in range(4)] + [(6,i+1) for i in range(3)]
+        self.pos_btn = [(5,2)] + [(4 - i//3,i % 3 + 1) for i in range(9)] + [(5-i,4) for i in range(4)] + [(1,4-i) for i in range(4)] + [(6,i+1) for i in range(3)]
         self.btn = []           # Liste des objets Boutons
         self.d = dico()
         self.btn_dic = self.d.button_dic()     # Boutons Opérations et Fonctionnalités liés à leurs fonctions correspondantes

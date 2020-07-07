@@ -1,3 +1,6 @@
+# Controller
+
+
 from PySide2.QtCore import QObject, Signal, Slot
 from src.view import ViewMainFrame
 from src.model import Model
@@ -37,6 +40,9 @@ class Controller(QObject):
     @Slot(str)
     def pressed(self, x):
         if x in '1234567890':
+            if self.m.change:
+                self.m.empile(0)
+                self.m.change = False
             self.m.set_x(int( str(self.m.x()) + str(x)))
         else:
             eval('self.m.' + self.dico_sig[x])()

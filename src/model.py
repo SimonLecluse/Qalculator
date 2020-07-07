@@ -1,8 +1,9 @@
 class Model:
 
     def __init__(self):
-        self.__reste = [0, 0, 0]  # initialisation du reste de la pile [T,Z,Y]
-        self.__dessus = 0       # initialisation du dessus de la pile X
+        self.__reste = [0, 0, 0]        # initialisation du reste de la pile [T,Z,Y]
+        self.__dessus = 0               # initialisation du dessus de la pile X
+        self.change = False              # si il y a eu opération sur le nombre x, n'empile pas 0
 
     def empile(self, val):
         """Empile val sur la pile"""
@@ -23,6 +24,7 @@ class Model:
         return self.__dessus
     def set_x(self, x1):
         self.__dessus = x1
+
     #Reste de la pile [t,z,y]
     def yzt(self):
         return self.__reste
@@ -34,44 +36,44 @@ class Model:
     def plus(self):
         """Addition des valeurs X et Y"""
         self.empile(self.depile() + self.depile())
-        self.empile(0)
+        self.change = True
 
     def moins(self):
         """Soustraction des valeurs X et Y"""
         self.empile(self.depile() - self.depile())
-        self.empile(0)
+        self.change = True
 
     def mult(self):
         """Multiplication des valeurs X et Y"""
         self.empile(self.depile() * self.depile())
-        self.empile(0)
+        self.change = True
 
     def div(self):
         """Division des valeurs X et Y"""
         self.empile(self.depile() / self.depile())
-        self.empile(0)
+        self.change = True
 
     def puiss(self):
         """X puissance Y"""
         self.empile(self.depile() ** self.depile())
-        self.empile(0)
+        self.change = True
 
     # Opérations algébriques sur la valeur du dessus
 
     def carre(self):
         """Carré de la valeur du dessus"""
         self.__dessus = self.__dessus ** 2
-        self.empile(0)
+        self.change = True
 
     def racine(self):
         """Racine de la valeur du dessus"""
         self.__dessus = self.__dessus ** .5
-        self.empile(0)
+        self.change = True
 
     def opp(self):
         """Transforme la valeur du dessus en son opposé"""
         self.__dessus = -self.__dessus
-        self.empile(0)
+        self.change = True
 
     def enter(self):
         """Action de la touche ENTER"""
