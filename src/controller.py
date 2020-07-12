@@ -17,7 +17,7 @@ class Controller(QObject):
 
         self.config = ConfigParser()
         self.config.read("config.ini")
-        self.mode_singe = self.config.get("mode", "singe")
+
         # Création de la View et connexion avec Controller
         self.gui = ViewMainFrame()
         self.gui.show()
@@ -25,8 +25,6 @@ class Controller(QObject):
         # Initialisation du signal btn_signal
         self.btn_signal.connect(self.pressed)
         self.gui.central_widget.btn_signal = self.btn_signal
-
-        # Label du texte affiché (pile)
 
         # Pour associer signal aux fonction de Model)
         self.d = dico()
@@ -36,10 +34,11 @@ class Controller(QObject):
         self.m = Model()
         self.dessus = self.m.x()
         self.reste = self.m.yzt()
-        self.m.mode_singe = self.mode_singe
+        self.m.mode_singe = self.gui.central_widget.btn_singe.isChecked()
 
     @Slot(str)
     def pressed(self, x):
+        self.m.mode_singe = self.gui.central_widget.btn_singe.isChecked()
         if x in '1234567890':
             if self.m.change:
                 self.m.empile(0)

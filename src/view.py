@@ -1,7 +1,8 @@
-from PySide2.QtWidgets import QMainWindow, QWidget, QPushButton, QGridLayout, QVBoxLayout, QHBoxLayout, QLabel
+from PySide2.QtWidgets import QMainWindow, QWidget, QPushButton, QGridLayout, QVBoxLayout, QHBoxLayout, QLabel, QCheckBox
 from PySide2.QtCore import Qt
 from src.dictionnary import dico
 from PySide2.QtGui import QPalette, QColor
+from configparser import ConfigParser
 
 
 class ViewMainFrame(QMainWindow):
@@ -24,15 +25,22 @@ class ViewMainWidget(QWidget):
         self.d = dico()
         self.btn_dic = self.d.button_dic()     # Boutons Opérations et Fonctionnalités liés à leurs fonctions correspondantes
 
+        self.config = ConfigParser()
+        self.config.read("config.ini")
+
         # Boutons Chiffres
         for i in range(10):
-            self.btn.append(VButtonNum((self.pos_btn[i][0], self.pos_btn[i][1]), (w, h), i, self.button_num_clicked))
+            self.btn.append(VButtonNum((self.pos_btn[i][0], self.pos_btn[i][1]), (w, h), i, self.button_num_clicked, self.config))
 
         # Boutons Opérations / Fonctionnalités
         for i in range(10,22):
-            self.btn.append(VButtonNum((self.pos_btn[i][0], self.pos_btn[i][1]), (w,h), self.btn_dic[i][0], eval("self."+self.btn_dic[i][1])))
+            self.btn.append(VButtonNum((self.pos_btn[i][0], self.pos_btn[i][1]), (w,h), self.btn_dic[i][0], eval("self."+self.btn_dic[i][1]), self.config))
 
-        self.display = Screen()
+        self.btn_singe = QCheckBox("mode singe")
+        self.btn_singe.setChecked(self.config.getboolean("mode", "singe_ini"))
+        self.btn_singe.setCheckable(True)
+
+        self.display = Screen(self.config)
 
         # Affichage des boutons sur la grille
         self.__set_layout()
@@ -50,6 +58,8 @@ class ViewMainWidget(QWidget):
                 layout_btn.addWidget(btn_i, btn_i.pos[0], btn_i.pos[1], 1, 2)
             else:
                 layout_btn.addWidget(btn_i, btn_i.pos[0], btn_i.pos[1])
+        layout_btn.addWidget(self.btn_singe, 5, 1)
+
         layout_screen.addWidget(self.display)
         layout_screen.addLayout(layout_btn)
 
@@ -85,7 +95,7 @@ class ViewMainWidget(QWidget):
 
 
 class VButtonNum(QPushButton):
-    def __init__(self, pos, dim, name, callback):
+    def __init__(self, pos, dim, name, callback, config):
         QPushButton.__init__(self, str(name))
         self.setFixedHeight(dim[1])
         self.pos = pos
@@ -93,14 +103,14 @@ class VButtonNum(QPushButton):
 
         if type(name) is int:
             self.clicked.connect(lambda: callback(name))
-            self.setStyleSheet("color: blue; border: 1px solid blue")
+            self.setStyleSheet(config.get("style", "btn_nb"))
         else:
             if name == "ENTER":
-                self.setStyleSheet("color: orange;")
+                self.setStyleSheet(config.get("style", "btn_enter"))
             self.clicked.connect(callback)
 
 class Screen(QWidget):
-    def __init__(self):
+    def __init__(self, config):
         QWidget.__init__(self)
         # Création de la zone de texte
         self.label_pile_txt = "0\n0\n0\n0\n0"
@@ -109,12 +119,12 @@ class Screen(QWidget):
         self.label_pile = QLabel()
         self.label_pile.setAlignment(Qt.AlignRight)
         self.label_pile.setText(self.label_pile_txt)
-        self.label_pile.setStyleSheet("color: white;")
+        self.label_pile.setStyleSheet(config.get("style", "txt_screen"))
 
         self.label_names = QLabel()
         self.label_names.setAlignment(Qt.AlignLeft)
         self.label_names.setText(self.label_names_txt)
-        self.label_names.setStyleSheet("color: white;")
+        self.label_names.setStyleSheet(config.get("style", "txt_screen"))
 
         self.layout_names = QHBoxLayout()        # Layout noms des lignes
         self.layout_names.addWidget(self.label_names, alignment=Qt.AlignLeft)
@@ -124,6 +134,6 @@ class Screen(QWidget):
 
         self.setAutoFillBackground(True)
         pal = QPalette()
-        pal.setColor(QPalette.Background, QColor("green"))
+        pal.setColor(QPalette.Background, QColor(config.get("style", "screen")))
         self.setPalette(pal)
 

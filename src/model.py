@@ -41,7 +41,7 @@ class Model:
     def plus(self):
         """Y + X"""
         self.last_x = self.__dessus
-        if self.__dessus == 1 and self.__reste[-1] == 1 and eval(self.mode_singe):
+        if self.__dessus == 1 and self.__reste[-1] == 1 and self.mode_singe:
             self.depile()
             self.depile()
             self.empile(3)
