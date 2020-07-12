@@ -6,13 +6,14 @@ class dico:
             11 : ['-', 'button_sub_clicked'],
             12 : ['*', 'button_mul_clicked'],
             13 : ['/', 'button_div_clicked'],
-            14 : ['*(-1)', 'button_opp_clicked'],
+            14 : ['+/-', 'button_opp_clicked'],
             15 : ['sqrt', 'button_sqrt_clicked'],
             16 : ['x^2', 'button_sq_clicked'],
-            17 : ['x^y', 'button_pow_clicked'],
-            18 : ['AC', 'button_ac_clicked'],
-            19 : ['clear', 'button_clear_clicked'],
-            20 : ['ENTER', 'button_enter_clicked'] }
+            17 : ['y^x', 'button_pow_clicked'],
+            18 : ['clst', 'button_ac_clicked'],
+            19 : ['clx', 'button_clear_clicked'],
+            20 : ['ENTER', 'button_enter_clicked'],
+            21 : ['LastX', 'button_lastx_clicked'] }
         # associe signaux aux fonctions Model
         self.__sig_dic = {
             '+' : 'plus',
@@ -22,10 +23,11 @@ class dico:
             '*(-1)' : 'opp',
             'sqrt' : 'racine',
             'x^2' : 'carre',
-            'x^y' : 'puiss',
+            'y^x' : 'puiss',
             'AC' : 'ac',
             'c' : 'clear',
-            'enter' : 'enter' }
+            'enter' : 'enter',
+            'lastx' : 'lastx'}
 
     def button_dic(self):
         return self.__button_dic
